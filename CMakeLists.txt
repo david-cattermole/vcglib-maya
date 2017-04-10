@@ -10,8 +10,8 @@ set(VCG_NODES_NAME vcgNodes)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_BUILD_TYPE DEBUG)
-# set(CMAKE_BUILD_TYPE RELEASE)
+# set(CMAKE_BUILD_TYPE DEBUG)
+set(CMAKE_BUILD_TYPE RELEASE)
 
 # Maya SDK
 set(MAYA_ROOT "/usr/autodesk/maya2016")
@@ -22,8 +22,9 @@ set(MAYA_LIB ${MAYA_ROOT}/lib)
 set(VCG_ROOT "/home/davidc/dev/meshlab/vcglib")
 set(VCG_INCLUDE ${VCG_ROOT})
 
-# Utilities
-set(UTILS_INCLUDE "/home/davidc/dev/cppTests/utilities")
+set(UTILITIES_HEADER_FILES
+        include/utilities/debugUtils.h
+        )
 
 set(PLY_LIB_SOURCE_FILES
         ${VCG_ROOT}/wrap/ply/plylib.cpp

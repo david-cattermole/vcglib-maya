@@ -1,5 +1,5 @@
 /*
- * Debugging Utils
+ * Debugging Utils - printing and benchmarking.
  */
 
 #ifndef DEBUG_UTILS_H

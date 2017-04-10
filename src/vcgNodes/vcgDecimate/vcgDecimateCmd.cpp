@@ -6,7 +6,7 @@
 #include <vcgNodes/vcgDecimate/vcgDecimateNode.h>
 
 // Utils
-#include <debugUtils.h>
+#include <utilities/debugUtils.h>
 
 // Function Sets
 #include <maya/MFnDependencyNode.h>

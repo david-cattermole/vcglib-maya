@@ -6,7 +6,7 @@
 #include <vcgNodes/vcgMeshCutter/vcgMeshCutterNode.h>
 
 // Utils
-#include <debugUtils.h>
+#include <utilities/debugUtils.h>
 
 // Function Sets
 

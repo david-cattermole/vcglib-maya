@@ -6,7 +6,7 @@
 #include <vcgNodes/vcgMeshCutter/vcgMeshCutterFty.h>
 
 // Utils
-#include <debugUtils.h>
+#include <utilities/debugUtils.h>
 
 // STL
 #include <limits>

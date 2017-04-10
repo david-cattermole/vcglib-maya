@@ -6,7 +6,7 @@
 #define VCG_NODES_LOAD_MODEL_UTILS_H
 
 // Utilities
-#include <debugUtils.h>
+#include <utilities/debugUtils.h>
 
 // STL
 #include <ctime>
