@@ -57,6 +57,7 @@ class Vertex_t : public vcg::Vertex<
     vcg::vertex::Normal3f,
     vcg::vertex::TexCoord2f,
     vcg::vertex::VFAdj,
+    vcg::vertex::VEAdj,
     vcg::vertex::Mark,
     vcg::vertex::BitFlags>
 {
