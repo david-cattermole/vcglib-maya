@@ -4,6 +4,7 @@
 
 // Local
 #include <vcgNodes/vcgReadFile/vcgReadFileNode.h>
+#include <vcgNodes/vcgNodeTypeIds.h>
 
 // Utils
 #include <utilities/debugUtils.h>
@@ -35,13 +36,16 @@
 
 
 // Unique Node TypeId
-MTypeId vcgReadFileNode::id(0x0008510A); // Use a unique ID.
+// See 'vcgNodeTypeIds.h', add a definition.
+MTypeId vcgReadFileNode::id(VCG_READ_FILE_NODE_ID);
 
 // Node attributes
 MObject vcgReadFileNode::inMesh;
 MObject vcgReadFileNode::outMesh;
 MObject vcgReadFileNode::aEnable;
 MObject vcgReadFileNode::aFilePath;
+MObject vcgReadFileNode::aCleanMesh;
+MObject vcgReadFileNode::aVerbose;
 
 vcgReadFileNode::vcgReadFileNode()
 {}
@@ -194,6 +198,26 @@ MStatus vcgReadFileNode::initialize()
   addAttribute(aFilePath);
   CHECK_MSTATUS(status);
 
+  // Clean Mesh
+  aCleanMesh = numFn.create("cleanMesh", "cleanMesh",
+                            MFnNumericData::kBoolean, 0);
+  status = numFn.setStorable(true);
+  status = numFn.setKeyable(false);
+  status = numFn.setChannelBox(true);
+  status = numFn.setHidden(false);
+  status = addAttribute(aCleanMesh);
+  CHECK_MSTATUS(status);
+
+  // Verbosity
+  aVerbose = numFn.create("verbose", "verbose",
+                          MFnNumericData::kBoolean, 0);
+  status = numFn.setStorable(true);
+  status = numFn.setKeyable(false);
+  status = numFn.setChannelBox(true);
+  status = numFn.setHidden(false);
+  status = addAttribute(aVerbose);
+  CHECK_MSTATUS(status);
+
   // Input Mesh
   inMesh = attrFn.create("inMesh", "im",
                          MFnMeshData::kMesh);
@@ -206,6 +230,7 @@ MStatus vcgReadFileNode::initialize()
   // Attribute is read-only because it is an output attribute
   outMesh = attrFn.create("outMesh", "om",
                           MFnMeshData::kMesh);
+  attrFn.setInternal(true);
   attrFn.setStorable(false);
   attrFn.setWritable(false);
   status = addAttribute(outMesh);
@@ -215,6 +240,7 @@ MStatus vcgReadFileNode::initialize()
   status = attributeAffects(inMesh, outMesh);
   status = attributeAffects(aFilePath, outMesh);
   status = attributeAffects(aEnable, outMesh);
+  status = attributeAffects(aCleanMesh, outMesh);
   CHECK_MSTATUS(status);
 
   return MS::kSuccess;
