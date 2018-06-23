@@ -3,40 +3,44 @@ project(vcgNodes)
 
 # constant names
 set(TRIDECM_CMD_NAME decimator)
-set(AUTO_ALIGN_CMD_NAME autoAlign)
 set(MESH_STATS_CMD_NAME meshStats)
 set(MESH_OP_NAME meshOp)
 set(VCG_NODES_NAME vcgNodes)
 
-set(CMAKE_CXX_STANDARD 11)
+# Ensure we are set to use C++ 11, even if CMake lacks the ability to change this (version prior to 3.1).
+if (CMAKE_VERSION VERSION_LESS "3.1")
+    if(CMAKE_COMPILER_IS_GNUCC)
+        set(CMAKE_CXX_FLAGS "-std=c++0x")
+    endif(CMAKE_COMPILER_IS_GNUCC)
+else()
+    set(CMAKE_CXX_STANDARD 11)
+endif()
 
-# set(CMAKE_BUILD_TYPE DEBUG)
-set(CMAKE_BUILD_TYPE RELEASE)
-
-# Maya SDK
-set(MAYA_ROOT "/usr/autodesk/maya2016")
-set(MAYA_INCLUDE ${MAYA_ROOT}/include)
-set(MAYA_LIB ${MAYA_ROOT}/lib)
+# Compile Flags, Release flags come from the Autodesk Maya build scripts.
+set(CMAKE_CXX_FLAGS_DEBUG "-std=c++0x -O0 -g -Wall")
+set(CMAKE_C_FLAGS_RELEASE "-std=c++0x -DBits64_ -m64 -DUNIX -D_BOOL -DLINUX -DFUNCPROTO -D_GNU_SOURCE -DLINUX_64 -fPIC -fno-strict-aliasing -DREQUIRE_IOSTREAM -O3 -Wall -Wno-multichar -Wno-comment -Wno-sign-compare -funsigned-char -pthread -fopenmp")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wno-deprecated -Wno-reorder -ftemplate-depth-25 -fno-gnu-keywords")
 
 # VCG
-set(VCG_ROOT "/home/davidc/dev/meshlab/vcglib")
-set(VCG_INCLUDE ${VCG_ROOT})
+SET(VCG_INCLUDE_PATH "/usr/local/include" CACHE PATH "vcglib include directory")
+
+# Maya SDK
+set(WITH_MAYA OFF CACHE BOOLEAN "Build the Maya plugins?")
+set(MAYA_INCLUDE_PATH "/usr/autodesk/maya/include" CACHE PATH "Maya include directory")
+set(MAYA_LIB_PATH "/usr/autodesk/maya/lib" CACHE PATH "Maya library directory")
+
 
 set(UTILITIES_HEADER_FILES
         include/utilities/debugUtils.h
         )
 
 set(PLY_LIB_SOURCE_FILES
-        ${VCG_ROOT}/wrap/ply/plylib.cpp
-        ${VCG_ROOT}/wrap/ply/plylib.h
+        ${VCG_INCLUDE_PATH}/wrap/ply/plylib.cpp
+        ${VCG_INCLUDE_PATH}/wrap/ply/plylib.h
         )
 
 set(DECIMATE_HEADER_FILES
         include/other/decimateUtils.h
-        )
-
-set(AUTO_ALIGN_HEADER_FILES
-        include/other/autoAlignUtils.h
         )
 
 set(MESH_STATS_HEADER_FILES
@@ -48,13 +52,6 @@ set(TRIDECM_CMD_SOURCE_FILES
         ${DECIMATE_HEADER_FILES}
         include/other/loadModelUtils.h
         src/standalone/decimatorCmd.cpp
-        )
-
-set(AUTO_ALIGN_CMD_SOURCE_FILES
-        ${PLY_LIB_SOURCE_FILES}
-        ${AUTO_ALIGN_HEADER_FILES}
-        include/other/loadModelUtils.h
-        src/standalone/autoAlignCmd.cpp
         )
 
 set(MESH_STATS_CMD_SOURCE_FILES
@@ -110,6 +107,9 @@ set(VCG_NODES_HEADER_FILES
         include/vcgNodes/vcgReadFile/vcgReadFileCmd.h
         include/vcgNodes/vcgReadFile/vcgReadFileFty.h
         include/vcgNodes/vcgReadFile/vcgReadFileNode.h
+        include/vcgNodes/vcgWriteFile/vcgWriteFileCmd.h
+        include/vcgNodes/vcgWriteFile/vcgWriteFileFty.h
+        include/vcgNodes/vcgWriteFile/vcgWriteFileNode.h
         include/vcgNodes/vcgMeshCutter/vcgMeshCutterCmd.h
         include/vcgNodes/vcgMeshCutter/vcgMeshCutterFty.h
         include/vcgNodes/vcgMeshCutter/vcgMeshCutterNode.h
@@ -129,6 +129,10 @@ set(VCG_NODES_SOURCE_FILES
         src/vcgNodes/vcgReadFile/vcgReadFileFty.cpp
         src/vcgNodes/vcgReadFile/vcgReadFileFtyAction.cpp
         src/vcgNodes/vcgReadFile/vcgReadFileNode.cpp
+        src/vcgNodes/vcgWriteFile/vcgWriteFileCmd.cpp
+        src/vcgNodes/vcgWriteFile/vcgWriteFileFty.cpp
+        src/vcgNodes/vcgWriteFile/vcgWriteFileFtyAction.cpp
+        src/vcgNodes/vcgWriteFile/vcgWriteFileNode.cpp
         src/vcgNodes/vcgMeshCutter/vcgMeshCutterCmd.cpp
         src/vcgNodes/vcgMeshCutter/vcgMeshCutterFty.cpp
         src/vcgNodes/vcgMeshCutter/vcgMeshCutterFtyAction.cpp
@@ -146,40 +150,37 @@ set(VCG_NODES_SOURCE_FILES
 
 include_directories(
         include
-        ${UTILS_INCLUDE}
-        ${VCG_INCLUDE}
-        ${MAYA_INCLUDE}
+        ${VCG_INCLUDE_PATH}
 )
 
 link_directories(
         ${LIBRARY_OUTPUT_PATH}
-        ${MAYA_LIB}
 )
 
 # 'Tri-Decimator' standalone
 add_executable(${TRIDECM_CMD_NAME} ${TRIDECM_CMD_SOURCE_FILES})
 
-# 'Auto-Align' standalone
-add_executable(${AUTO_ALIGN_CMD_NAME} ${AUTO_ALIGN_CMD_SOURCE_FILES})
-
 # 'Mesh Stats' standalone
 add_executable(${MESH_STATS_CMD_NAME} ${MESH_STATS_CMD_SOURCE_FILES})
 
-## 'meshOp' maya plugin library
-#add_library(${MESH_OP_NAME} SHARED ${MESH_OP_SOURCE_FILES})
-#target_link_libraries(${MESH_OP_NAME}
-#        OpenMaya
-#        Foundation)
-#set_target_properties(${MESH_OP_NAME} PROPERTIES
-#        PREFIX "" # no 'lib' prefix to .so files
-#        )
+# Add Maya paths and compile targets
+if (WANT_MAYA)
+    include_directories(
+            ${MAYA_INCLUDE_PATH}
+    )
 
-# 'vcgNodes' maya plugin library
-add_library(${VCG_NODES_NAME} SHARED ${VCG_NODES_SOURCE_FILES})
-target_link_libraries(${VCG_NODES_NAME}
-        OpenMaya
-        Foundation)
-set_target_properties(${VCG_NODES_NAME} PROPERTIES
-        PREFIX "" # no 'lib' prefix to .so files
-        )
+    link_directories(
+            ${MAYA_LIB_PATH}
+    )
+
+    # 'vcgNodes' maya plugin library
+    add_library(${VCG_NODES_NAME} SHARED ${VCG_NODES_SOURCE_FILES})
+    target_link_libraries(${VCG_NODES_NAME}
+            OpenMaya
+            Foundation)
+    set_target_properties(${VCG_NODES_NAME} PROPERTIES
+            PREFIX "" # no 'lib' prefix to .so files
+            )
+endif()
+
 
