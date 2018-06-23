@@ -4,6 +4,7 @@
 
 // Local
 #include <vcgNodes/vcgMeshCutter/vcgMeshCutterNode.h>
+#include <vcgNodes/vcgNodeTypeIds.h>
 
 // Utils
 #include <utilities/debugUtils.h>
@@ -34,7 +35,8 @@
 
 
 // Unique Node TypeId
-MTypeId vcgMeshCutterNode::id(0x00085002); // Use a unique ID.
+// See 'vcgNodeTypeIds.h', add a definition.
+MTypeId vcgMeshCutterNode::id(VCG_MESH_CUTTER_NODE_ID);
 
 // Node attributes
 MObject vcgMeshCutterNode::inMesh;

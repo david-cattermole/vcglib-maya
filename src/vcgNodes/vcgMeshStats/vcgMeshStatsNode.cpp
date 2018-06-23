@@ -4,6 +4,7 @@
 
 // Local
 #include <vcgNodes/vcgMeshStats/vcgMeshStatsNode.h>
+#include <vcgNodes/vcgNodeTypeIds.h>
 
 // Utils
 #include <utilities/debugUtils.h>
@@ -33,7 +34,8 @@
 
 
 // Unique Node TypeId
-MTypeId vcgMeshStatsNode::id(0x00085110); // Use a unique ID.
+// See 'vcgNodeTypeIds.h', add a definition.
+MTypeId vcgMeshStatsNode::id(VCG_MESH_STATS_NODE_ID); // Use a unique ID.
 
 // Node attributes
 MObject vcgMeshStatsNode::inMesh;
