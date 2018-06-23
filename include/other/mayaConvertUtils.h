@@ -125,13 +125,13 @@ void convertMayaToVCG(const MObject &inputObj,
     }
   }
   DBG("convertMayaToVCG: 5");
-  vcg::tri::Allocator<Mesh_t>::CompactFaceVector(outputMesh);
+//  vcg::tri::Allocator<Mesh_t>::CompactFaceVector(outputMesh);
 
   // Force compactness of data structure.
   DBG("convertMayaToVCG: 6");
 //  vcg::tri::Allocator<Mesh_t>::CompactVertexVector(outputMesh);
 //  vcg::tri::Allocator<Mesh_t>::CompactFaceVector(outputMesh);
-//  vcg::tri::Allocator<Mesh_t>::CompactEveryVector(outputMesh);
+  vcg::tri::Allocator<Mesh_t>::CompactEveryVector(outputMesh);
 
   DBG("convertMayaToVCG: 7");
   vcg::tri::UpdateBounding<Mesh_t>::Box(outputMesh);
@@ -144,11 +144,11 @@ void convertMayaToVCG(const MObject &inputObj,
   vcg::tri::UpdateTopology<Mesh_t>::FaceFace(outputMesh);
   vcg::tri::UpdateTopology<Mesh_t>::TestFaceFace(outputMesh);
   vcg::tri::UpdateTopology<Mesh_t>::VertexFace(outputMesh);
-  vcg::tri::UpdateTopology<Mesh_t>::VertexEdge(outputMesh);
-  vcg::tri::UpdateTopology<Mesh_t>::EdgeEdge(outputMesh);
+//  vcg::tri::UpdateTopology<Mesh_t>::VertexEdge(outputMesh);
+//  vcg::tri::UpdateTopology<Mesh_t>::EdgeEdge(outputMesh);
   vcg::tri::UpdateTopology<Mesh_t>::AllocateEdge(outputMesh);
   DBG("convertMayaToVCG: 7c");
-  vcg::tri::UpdateFlags<Mesh_t>::Clear(outputMesh);
+//  vcg::tri::UpdateFlags<Mesh_t>::Clear(outputMesh);
   vcg::tri::UpdateFlags<Mesh_t>::FaceBorderFromFF(outputMesh);
   vcg::tri::UpdateFlags<Mesh_t>::VertexBorderFromFaceBorder(outputMesh);
   vcg::tri::UpdateFlags<Mesh_t>::FaceBorderFromFF(outputMesh);
