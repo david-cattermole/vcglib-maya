@@ -25,12 +25,12 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wno-deprecated -Wno-reord
 set(VCG_INCLUDE_PATH "/usr/local/include" CACHE PATH "vcglib include directory")
 
 # Standalone utilities?
-set(WITH_STANDALONE ON CACHE BOOLEAN "Build the standalone utilities?")
-set(WITH_DECIMATOR ON CACHE BOOLEAN "Build the standalone decimator utility?")
-set(WITH_MESH_STATS ON CACHE BOOLEAN "Build the standalone meshStats utility?")
+set(WANT_STANDALONE ON CACHE BOOLEAN "Build the standalone utilities?")
+set(WANT_DECIMATOR ON CACHE BOOLEAN "Build the standalone decimator utility?")
+set(WANT_MESH_STATS ON CACHE BOOLEAN "Build the standalone meshStats utility?")
 
 # Maya SDK
-set(WITH_MAYA OFF CACHE BOOLEAN "Build the Maya plugins?")
+set(WANT_MAYA OFF CACHE BOOLEAN "Build the Maya plugins?")
 set(MAYA_INCLUDE_PATH "/usr/autodesk/maya/include" CACHE PATH "Maya include directory")
 set(MAYA_LIB_PATH "/usr/autodesk/maya/lib" CACHE PATH "Maya library directory")
 
