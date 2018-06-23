@@ -19,6 +19,7 @@
 #include <vcg/complex/algorithms/update/color.h>
 #include <vcg/complex/algorithms/update/normal.h>
 
+// uncomment the line below to turn on experimental texture coordinate decimation.
 // #define WITH_TEXTURE_COORDS
 #ifdef WITH_TEXTURE_COORDS
 
@@ -182,6 +183,8 @@ void decimate(Mesh_t &mesh,
               TriEdgeColQuadParam_t qparams,
               bool verbose = false)
 {
+  const std::string toolHeader = "VCG Decimate: ";
+
   timer.m_cleanup.start();
 
   int meshFaceNum = mesh.FN();
@@ -195,7 +198,6 @@ void decimate(Mesh_t &mesh,
   vcg::tri::UpdateNormal<Mesh_t>::PerVertexNormalizedPerFace(mesh);
   vcg::tri::UpdateNormal<Mesh_t>::PerFace(mesh);
 
-  const std::string toolHeader = "VCG Decimate: ";
 
   if (cleaningFlag)
   {
@@ -227,13 +229,14 @@ void decimate(Mesh_t &mesh,
 
     int manifold_edges_ff = vcg::tri::Clean<Mesh_t>::CountNonManifoldEdgeFF(mesh);
     int manifold_vertex_ff = vcg::tri::Clean<Mesh_t>::CountNonManifoldVertexFF(mesh);
+    // VRB(toolHeader << "manifold_edges_ff = " << manifold_edges_ff);
+    // VRB(toolHeader << "manifold_vertex_ff = " << manifold_vertex_ff);
     if (manifold_edges_ff > 0)
     {
-      WRN("Mesh has some not 2-manifold faces, Curvature computation requires manifoldness");
+      WRN("Mesh has some non 2-manifold faces, Curvature computation requires manifoldness");
     }
     else
     {
-      // vcg::tri::Allocator<Mesh_t>::CompactVertexVector(mesh);
       vcg::tri::Allocator<Mesh_t>::CompactEveryVector(mesh);
       vcg::tri::UpdateCurvature<Mesh_t>::MeanAndGaussian(mesh);
 
