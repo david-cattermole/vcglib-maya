@@ -16,7 +16,14 @@ This set of nodes and commands for Autodesk Maya are designed to integrate [vcgl
 
 ## Usage
 
-Example 1:
+### Example 1
+Use the `decimator` command line utility to decimate Mesh files by a percentage of total faces.
+
+```commandline
+$ decimator /path/to/input.obj /path/to/output.obj 10
+```
+
+### Example 2
 
 Create a polygon sphere and decimate it with VCG's triangle decimation algorithm.
 ```python
@@ -26,7 +33,7 @@ sphere = maya.cmds.polySphere()
 node = maya.cmds.vcgDecimate(sphere[0], percent=20)
 ```
 
-Example 2:
+### Example 3
 
 A more elaborate node network which performs the following steps.
 1) Read an .OBJ file from disk
@@ -111,8 +118,8 @@ $ cd <project root>
 $ mkdir build
 $ cd build
 $ cmake \
-  -DWANT_MAYA=1 \
   -DVCG_INCLUDE_PATH=/path/to/vcglib \
+  -DWANT_MAYA=1 \
   -DMAYA_INCLUDE_PATH=/path/to/maya/include \
   -DMAYA_LIB_PATH=/path/to/maya/lib ..
 $ make -j 4
