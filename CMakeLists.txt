@@ -22,7 +22,12 @@ set(CMAKE_C_FLAGS_RELEASE "-std=c++0x -DBits64_ -m64 -DUNIX -D_BOOL -DLINUX -DFU
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wno-deprecated -Wno-reorder -ftemplate-depth-25 -fno-gnu-keywords")
 
 # VCG
-SET(VCG_INCLUDE_PATH "/usr/local/include" CACHE PATH "vcglib include directory")
+set(VCG_INCLUDE_PATH "/usr/local/include" CACHE PATH "vcglib include directory")
+
+# Standalone utilities?
+set(WITH_STANDALONE ON CACHE BOOLEAN "Build the standalone utilities?")
+set(WITH_DECIMATOR ON CACHE BOOLEAN "Build the standalone decimator utility?")
+set(WITH_MESH_STATS ON CACHE BOOLEAN "Build the standalone meshStats utility?")
 
 # Maya SDK
 set(WITH_MAYA OFF CACHE BOOLEAN "Build the Maya plugins?")
@@ -157,11 +162,18 @@ link_directories(
         ${LIBRARY_OUTPUT_PATH}
 )
 
-# 'Tri-Decimator' standalone
-add_executable(${TRIDECM_CMD_NAME} ${TRIDECM_CMD_SOURCE_FILES})
+# Standalone Utilities
+if (WANT_STANDALONE)
+    # 'Tri-Decimator' standalone
+    if (WANT_DECIMATOR)
+        add_executable(${TRIDECM_CMD_NAME} ${TRIDECM_CMD_SOURCE_FILES})
+    endif()
 
-# 'Mesh Stats' standalone
-add_executable(${MESH_STATS_CMD_NAME} ${MESH_STATS_CMD_SOURCE_FILES})
+    # 'Mesh Stats' standalone
+    if (WANT_MESH_STATS)
+        add_executable(${MESH_STATS_CMD_NAME} ${MESH_STATS_CMD_SOURCE_FILES})
+    endif()
+endif()
 
 # Add Maya paths and compile targets
 if (WANT_MAYA)
