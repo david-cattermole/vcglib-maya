@@ -4,6 +4,7 @@
 
 // Local
 #include <vcgNodes/vcgDecimate/vcgDecimateNode.h>
+#include <vcgNodes/vcgNodeTypeIds.h>
 
 // Utils
 #include <utilities/debugUtils.h>
@@ -32,7 +33,8 @@
 
 
 // Unique Node TypeId
-MTypeId     vcgDecimateNode::id(0x00085001); // Use a unique ID.
+// See 'vcgNodeTypeIds.h', add a definition.
+MTypeId     vcgDecimateNode::id(VCG_DECIMATE_NODE_ID);
 
 // Node attributes
 MObject     vcgDecimateNode::inMesh;

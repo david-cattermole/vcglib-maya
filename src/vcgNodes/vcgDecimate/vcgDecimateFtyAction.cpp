@@ -56,7 +56,6 @@ MStatus vcgDecimateFty::doIt()
 
   TriEdgeColQuadParam_t qparams;
   qparams.QualityThr = fQualityThreshold;
-  qparams.QualityCheck = fUseQualityThreshold;
   qparams.NormalCheck = fUseNormalThreshold;
   qparams.NormalThrRad = vcg::math::ToRad(fNormalThreshold);
   qparams.OptimalPlacement = true;
@@ -64,7 +63,7 @@ MStatus vcgDecimateFty::doIt()
   qparams.PreserveBoundary = fPreserveBoundary;
   qparams.BoundaryWeight = fBoundaryWeight;
   qparams.UseArea = true;
-  qparams.UseVertexWeight = qparams.QualityWeight = true;
+  qparams.UseVertexWeight = true;
 
   // Decimate
   decimate(tmpVcgMesh, cleaningFlag,
