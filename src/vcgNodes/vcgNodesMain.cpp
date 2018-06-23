@@ -5,6 +5,9 @@
 #include <vcgNodes/vcgReadFile/vcgReadFileCmd.h>
 #include <vcgNodes/vcgReadFile/vcgReadFileNode.h>
 
+#include <vcgNodes/vcgWriteFile/vcgWriteFileCmd.h>
+#include <vcgNodes/vcgWriteFile/vcgWriteFileNode.h>
+
 #include <vcgNodes/vcgMeshCutter/vcgMeshCutterCmd.h>
 #include <vcgNodes/vcgMeshCutter/vcgMeshCutterNode.h>
 
@@ -46,6 +49,26 @@ MStatus initializePlugin(MObject obj)
     if (!status)
     {
       status.perror("VCG Read File: registerNode");
+      return status;
+    }
+  }
+
+  // VCG Write File
+  {
+    status = plugin.registerCommand("vcgWriteFile", vcgWriteFile::creator);
+    if (!status)
+    {
+      status.perror("VCG Write File: registerCommand");
+      return status;
+    }
+
+    status = plugin.registerNode("vcgWriteFileNode",
+                                 vcgWriteFileNode::id,
+                                 vcgWriteFileNode::creator,
+                                 vcgWriteFileNode::initialize);
+    if (!status)
+    {
+      status.perror("VCG Write File: registerNode");
       return status;
     }
   }
@@ -143,7 +166,24 @@ MStatus uninitializePlugin(MObject obj)
     }
   }
 
-  // VCG Read File
+  // VCG Write File
+  {
+    status = plugin.deregisterCommand("vcgWriteFile");
+    if (!status)
+    {
+      status.perror("VCG Write File: deregisterCommand");
+      return status;
+    }
+
+    status = plugin.deregisterNode(vcgWriteFileNode::id);
+    if (!status)
+    {
+      status.perror("VCG Write File: deregisterNode");
+      return status;
+    }
+  }
+
+  // VCG Mesh Stats
   {
     status = plugin.deregisterCommand("vcgMeshStats");
     if (!status)
