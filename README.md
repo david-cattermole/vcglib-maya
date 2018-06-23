@@ -108,6 +108,8 @@ $ tar -xf v1.0.1.tar.gz
 ```
 If everything worked, you'll have a new directory in your current working directory named 'vcglib-1.0.1', this is the root of the VCG library headers. Everything is related to VCG is contained in this directory.
 
+Optionally you may use any version of VCG, including the latest development branch, however results may be unstable.
+
 #### Compile VCG Maya Plugin
 
 Now we have our dependencies, we can now compile the Maya plugin.
