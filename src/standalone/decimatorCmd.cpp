@@ -8,10 +8,6 @@
 #include <other/decimateUtils.h>
 #include <other/loadModelUtils.h>
 
-// VCG
-#include <wrap/io_trimesh/import.h>
-#include <wrap/io_trimesh/export.h>
-
 
 // forward declaration.
 void printUsage();
@@ -261,10 +257,10 @@ void printUsage()
       << "     --boundary-weight [num]        Boundary Weight (default 0.5)" << std::endl
       << "     --preserve-boundary [0|1]      Preserve or not mesh boundary (default 0)" << std::endl
       << "     --preserve-topology [0|1]      Preserve or not mesh topology (default 0)" << std::endl
-      << "     --use-area [0|1]               Use or not Area Weighted Quadrics (default 1)" << std::endl
-      << "     --optimal-placement [0|1]      Use or not vertex optimal placement (default 1)" << std::endl
-      << "     --scale-independent [0|1]      Use or not Scale Independent quadric measure (default 1) " << std::endl
-      << "     --safe-heap-update [0|1]       Use or not Safe Heap Update (default no)" << std::endl
+      << "     --use-area [0|1]               Use Area Weighted Quadrics (default 1)" << std::endl
+      << "     --optimal-placement [0|1]      Use vertex optimal placement (default 1)" << std::endl
+      << "     --scale-independent [0|1]      Use Scale Independent quadric measure (default 1) " << std::endl
+      << "     --safe-heap-update [0|1]       Use Safe Heap Update (default 0)" << std::endl
       << std::endl;
   exit(-1);
 }
