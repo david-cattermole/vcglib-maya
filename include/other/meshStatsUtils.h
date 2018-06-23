@@ -99,53 +99,33 @@ void meshStats(Mesh_t &srcMesh,
   const std::string toolHeader = "VCG Mesh Stats: ";
 
   // Ensure the meshes are up to date.
-  DBG(toolHeader << "1");
   vcg::tri::UpdateBounding<Mesh_t>::Box(srcMesh);
-  DBG(toolHeader << "1a");
   vcg::tri::UpdateTopology<Mesh_t>::FaceFace(srcMesh);
-  DBG(toolHeader << "1b");
   vcg::tri::UpdateTopology<Mesh_t>::VertexFace(srcMesh);
-  DBG(toolHeader << "1c");
   vcg::tri::UpdateFlags<Mesh_t>::FaceBorderFromFF(srcMesh);
-  DBG(toolHeader << "1d");
   vcg::tri::UpdateNormal<Mesh_t>::NormalizePerVertex(srcMesh);
-  DBG(toolHeader << "1e");
   vcg::tri::UpdateNormal<Mesh_t>::NormalizePerFace(srcMesh);
-  DBG(toolHeader << "1f");
   vcg::tri::UpdateNormal<Mesh_t>::PerFaceNormalized(srcMesh);
-  DBG(toolHeader << "1g");
   vcg::tri::UpdateNormal<Mesh_t>::PerVertexNormalized(srcMesh);
-  DBG(toolHeader << "2");
   vcg::tri::Allocator<Mesh_t>::CompactEveryVector(srcMesh);
 
-  DBG(toolHeader << "3");
   vcg::tri::Clean<Mesh_t>::RemoveUnreferencedVertex(srcMesh);
-  DBG(toolHeader << "3a");
   vcg::tri::Clean<Mesh_t>::RemoveNonManifoldFace(srcMesh);
-  DBG(toolHeader << "3b");
   vcg::tri::Clean<Mesh_t>::RemoveFaceOutOfRangeArea(srcMesh);
-  DBG(toolHeader << "3c");
   timer.m_cleanup.stop();
   timer.m_compute.start();
 
-  DBG(toolHeader << "4");
   outWaterTight = vcg::tri::Clean<Mesh_t>::IsWaterTight(srcMesh);
   if (outWaterTight)
   {
 
-    DBG(toolHeader << "5");
     vcg::tri::Inertia<Mesh_t> inertia(srcMesh);
-    DBG(toolHeader << "5a");
     inertia.Compute(srcMesh);
-    DBG(toolHeader << "5b");
     outMass = inertia.Mass();
-    DBG(toolHeader << "5c");
     outCentreOfMass = inertia.CenterOfMass();
-    DBG(toolHeader << "5d");
   }
   else
   {
-    DBG(toolHeader << "6");
     outMass = 0.0f;
     outCentreOfMass[0] = 0.0;
     outCentreOfMass[1] = 0.0;
@@ -156,7 +136,6 @@ void meshStats(Mesh_t &srcMesh,
   // Thin shell barycenter
   outCentreOfShell = vcg::tri::Stat<Mesh_t>::ComputeShellBarycenter(srcMesh);
   outArea = vcg::tri::Stat<Mesh_t>::ComputeMeshArea(srcMesh);
-
 
   DBG(toolHeader << "Out Water Tight: " << outWaterTight);
   DBG(toolHeader << "Out Centre Of Mass X: " << outCentreOfMass[0]);
@@ -169,7 +148,6 @@ void meshStats(Mesh_t &srcMesh,
   DBG(toolHeader << "Out Area: " << outArea);
 
   timer.m_compute.stop();
-  DBG(toolHeader << "7");
 }
 
 #endif // VCG_NODES_MESH_STATS_UTILS_H
