@@ -1,28 +1,27 @@
 """
-Interface to run all tests for rspSolver.
+Interface to run all tests for VCG Nodes.
 """
 
+import unittest
 
 try:
     import maya.standalone
     maya.standalone.initialize(name='python')
+    import maya.cmds
 except:
     pass
 
-import sys
-from vcgNodes_tests import test_meshCutter
-from vcgNodes_tests import test_decimate
-from vcgNodes_tests import test_meshStats
-from vcgNodes_tests import test_readFile
+
+# import modules so that 'unittest' module can find them.
+# from vcgNodes_tests.test_readFile import ReadFileTestCase
+# from vcgNodes_tests.test_writeFile import WriteFileTestCase
+from vcgNodes_tests.test_meshCutter import MeshCutterTestCase
+from vcgNodes_tests.test_decimate import DecimateTestCase
+from vcgNodes_tests.test_meshStats import MeshStatsTestCase
 
 def run():
-    # test_readFile.main()
-    test_meshStats.main()
-    # test_meshCutter.main()
-    # test_decimate.main()
-    return
+    unittest.main()
 
-    
 if __name__ == '__main__':
     run()
-    maya.cmds.quit()
+    maya.cmds.quit(force=True)

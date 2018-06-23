@@ -1,5 +1,5 @@
 """
-Example and test program for solver.
+Example and test program for read file node.
 """
 
 import os
@@ -7,51 +7,33 @@ import maya.cmds
 import testUtils
 
 NODE_TYPE = 'vcgReadFileNode'
-DIR = '/home/davidc/dev/mayaVcgNodes/data/'
 
+class ReadFileTestCase(testUtils.BaseTestCase):
 
-def saveFile(name):
-    path = '/home/davidc/dev/mayaVcgNodes/test/vcgReadFileNode_%s_export.ma'
-    path = path % name
-    print 'Save...', path
-    maya.cmds.file(rename=path)
-    maya.cmds.file(save=True,
-                   type='mayaAscii',
-                   constructionHistory=True,
-                   force=True)
-    return
+    def runTest(self):
+        """
+        Read File node test.
+        """
+        dataDir = self.getDataRoot()
+        self.assertTrue(self.hasNodeTypes([NODE_TYPE]))
 
+        polyCubeNode = maya.cmds.createNode('polyCube')
+        readFileNode = maya.cmds.createNode('vcgReadFileNode')
+        meshNode = maya.cmds.createNode('mesh')
+        maya.cmds.sets(edit=True, forceElement='initialShadingGroup')
 
-def main():
-    print 'Running:', __file__
+        maya.cmds.setAttr(readFileNode + '.verbose', 1)
 
-    print 'Initialize scene...'
-    testUtils.reinitializeScene()
+        maya.cmds.connectAttr(polyCubeNode + '.output', readFileNode + '.inMesh')
+        maya.cmds.connectAttr(readFileNode + '.outMesh', meshNode + '.inMesh')
+        nodeAttr = readFileNode + '.filePath'
 
-    # Ensure it's loaded.
-    if not testUtils.hasNodeTypes([NODE_TYPE]):
-        assert False
-
-    polyCubeNode = maya.cmds.createNode('polyCube')
-    readFileNode = maya.cmds.createNode('vcgReadFileNode')
-    # decimateNode = maya.cmds.createNode('vcgDecimateNode')
-    meshNode = maya.cmds.createNode('mesh')
-    maya.cmds.sets(edit=True, forceElement='initialShadingGroup')
-
-    maya.cmds.connectAttr(polyCubeNode + '.output', readFileNode + '.inMesh')
-    maya.cmds.connectAttr(readFileNode + '.outMesh', meshNode + '.inMesh')
-    nodeAttr = readFileNode + '.filePath'
-
-    if os.path.isdir(DIR):
-        inputFiles = os.listdir(DIR) or []
+        inputFiles = os.listdir(dataDir) or []
         for inputFile in sorted(inputFiles):
             split = os.path.splitext(inputFile)
             name = split[0]
             if split[-1] in ['.obj', '.ply']:
-                inputPath = os.path.join(DIR, inputFile)
+                inputPath = os.path.join(dataDir, inputFile)
                 maya.cmds.setAttr(nodeAttr, inputPath, type='string')
-                saveFile(name)
-    else:
-        print 'Invalid directory!', DIR
-    print '=' * 100
-    return True
+                self.saveMayaAsciiFile(NODE_TYPE, name)
+        return
