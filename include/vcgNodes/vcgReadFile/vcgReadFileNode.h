@@ -33,6 +33,8 @@ public:
   // attributes
   static MObject aEnable;
   static MObject aFilePath;
+  static MObject aCleanMesh;
+  static MObject aVerbose;
 
   static MTypeId id;
 
